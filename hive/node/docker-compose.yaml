@@ -1,0 +1,8 @@
+services:
+  load-hive-{{ .HiveID }}-node:
+    image: hub.deepin.com/library/locustio/locust:latest
+    working_dir: /mnt/locust
+    command: -f /mnt/locust/locustfile.py --worker --master-host={{ .MainIP }} --master-port={{ .InternalAPIPort}}
+    volumes:
+      - './:/mnt/locust/:ro'
+    restart: always
