@@ -1,9 +1,10 @@
 package hive
 
 type Config struct {
-	Main  MainConfig   `yaml:"main"`
-	Nodes []NodeConfig `yaml:"nodes"`
-	Hive  HiveConfig   `yaml:"hive"`
+	Main       MainConfig        `yaml:"main"`
+	Nodes      []NodeConfig      `yaml:"nodes"`
+	Hive       HiveConfig        `yaml:"hive"`
+	ExtraHosts map[string]string `yaml:"extra-hosts"`
 }
 
 type MainConfig struct {

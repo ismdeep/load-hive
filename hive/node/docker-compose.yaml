@@ -5,4 +5,10 @@ services:
     command: -f /mnt/locust/locustfile.py --worker --master-host={{ .MainIP }} --master-port={{ .InternalAPIPort}}
     volumes:
       - './:/mnt/locust/:ro'
+{{ if .ExtraHosts }}
+    extra_hosts:
+{{ range $hostStr := .ExtraHosts }}
+      - '{{ $hostStr }}'
+{{ end }}
+{{ end }}
     restart: always

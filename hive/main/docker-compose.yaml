@@ -8,5 +8,11 @@ services:
       - './:/mnt/locust/:ro'
     ports:
       - '{{ .WebPort }}:{{ .WebPort }}'
-      - "{{ .InternalAPIPort }}:5557"
+      - '{{ .InternalAPIPort }}:5557'
+{{ if .ExtraHosts }}
+    extra_hosts:
+{{ range $hostStr := .ExtraHosts }}
+      - '{{ $hostStr }}'
+{{ end }}
+{{ end }}
     restart: always

@@ -8,7 +8,6 @@ import (
 	"sync"
 
 	"github.com/ismdeep/load-hive/pkg/cmdutil"
-	"github.com/ismdeep/load-hive/pkg/templateutil"
 )
 
 func (receiver *Hive) UpMain() error {
@@ -32,14 +31,7 @@ func (receiver *Hive) UpMain() error {
 	Log("INFO", cfg.Main.IP, "main dir %v synced", receiver.MainDir())
 
 	// generate docker-compose content
-	text, err := templateutil.Generate(dockerComposeMainContent, map[string]any{
-		"HiveID":          receiver.config.Hive.UUID,
-		"UserCount":       1000,
-		"SpawnRate":       100,
-		"WebPort":         receiver.config.Hive.Port,
-		"Target":          receiver.config.Hive.Target,
-		"InternalAPIPort": receiver.config.Hive.InternalAPIPort,
-	})
+	text, err := GenerateMainDockerCompose(*receiver.config)
 	if err != nil {
 		return err
 	}
@@ -104,12 +96,7 @@ func (receiver *Hive) UpNode(node NodeConfig) error {
 	Log("INFO", node.IP, "node dir %v synced", receiver.NodeDir())
 
 	// generate docker-compose content
-	text, err := templateutil.Generate(dockerComposeNodeContent, map[string]any{
-		"HiveID":          receiver.config.Hive.UUID,
-		"WebPort":         receiver.config.Hive.Port,
-		"MainIP":          receiver.config.Main.IP,
-		"InternalAPIPort": receiver.config.Hive.InternalAPIPort,
-	})
+	text, err := GenerateNodeDockerCompose(*receiver.config)
 	if err != nil {
 		return err
 	}
