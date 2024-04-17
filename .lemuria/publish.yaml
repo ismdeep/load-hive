@@ -1,0 +1,6 @@
+jobs:
+  - type: shell
+    host: 10.20.42.232
+    user: root
+    workdir: /data/build/load-hive
+    shell: bash .lemuria/publish.sh
