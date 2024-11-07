@@ -12,7 +12,8 @@ type MainConfig struct {
 }
 
 type NodeConfig struct {
-	IP string `yaml:"ip"`
+	IP     string `yaml:"ip"`
+	Worker int    `yaml:"worker"`
 }
 
 type HiveConfig struct {
@@ -20,4 +21,6 @@ type HiveConfig struct {
 	Port            string `yaml:"port"`
 	Target          string `yaml:"target"`
 	InternalAPIPort string `yaml:"internal-api-port"`
+	UserCount       int    `yaml:"user_count"`
+	SpawnRate       int    `yaml:"spawn_rate"`
 }

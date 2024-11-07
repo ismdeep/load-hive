@@ -126,9 +126,10 @@ func (receiver *Hive) UpNode(node NodeConfig) error {
 	// remote docker-compose up -d
 	if output, err := cmdutil.Run(receiver.dir, nil, "ssh",
 		fmt.Sprintf("root@%v", node.IP),
-		fmt.Sprintf("docker-compose --project-directory '%v' up -d --force-recreate --scale load-hive-%v-node=16",
+		fmt.Sprintf("docker-compose --project-directory '%v' up -d --force-recreate --scale load-hive-%v-node=%v",
 			receiver.NodeDir(),
 			receiver.config.Hive.UUID,
+			node.Worker,
 		)); err != nil {
 		return errors.Join(
 			errors.New("failed to up node service"),

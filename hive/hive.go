@@ -26,6 +26,19 @@ func New(dir string, configName string) (*Hive, error) {
 		return nil, err
 	}
 
+	// 清理cfg
+	for i := 0; i < len(cfg.Nodes); i++ {
+		if cfg.Nodes[i].Worker <= 0 {
+			cfg.Nodes[i].Worker = 8
+		}
+	}
+	if cfg.Hive.UserCount <= 0 {
+		cfg.Hive.UserCount = 1000
+	}
+	if cfg.Hive.SpawnRate <= 0 {
+		cfg.Hive.SpawnRate = 100
+	}
+
 	project := Hive{
 		dir:        dir,
 		configName: configName,

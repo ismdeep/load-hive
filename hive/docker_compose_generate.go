@@ -14,8 +14,8 @@ func GenerateMainDockerCompose(cfg Config) (string, error) {
 
 	text, err := templateutil.Generate(dockerComposeMainContent, map[string]any{
 		"HiveID":          cfg.Hive.UUID,
-		"UserCount":       1000,
-		"SpawnRate":       100,
+		"UserCount":       cfg.Hive.UserCount,
+		"SpawnRate":       cfg.Hive.SpawnRate,
 		"WebPort":         cfg.Hive.Port,
 		"Target":          cfg.Hive.Target,
 		"InternalAPIPort": cfg.Hive.InternalAPIPort,
