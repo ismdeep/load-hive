@@ -11,7 +11,11 @@ import (
 
 func (receiver *Hive) DownMain() error {
 	// stop services
-	if output, err := cmdutil.Run(receiver.dir, nil, "ssh",
+	if output, err := cmdutil.Run(
+		receiver.dir,
+		nil,
+		"ssh",
+		"-o", "StrictHostKeyChecking=no",
 		fmt.Sprintf("root@%v", receiver.config.Main.IP),
 		fmt.Sprintf("docker-compose --project-directory '%v' down", receiver.MainDir())); err != nil {
 
@@ -25,7 +29,11 @@ func (receiver *Hive) DownMain() error {
 	Log("INFO", receiver.config.Main.IP, "main dir %v docker-compose down success", receiver.MainDir())
 
 	// remove files
-	if output, err := cmdutil.Run(receiver.dir, nil, "ssh",
+	if output, err := cmdutil.Run(
+		receiver.dir,
+		nil,
+		"ssh",
+		"-o", "StrictHostKeyChecking=no",
 		fmt.Sprintf("root@%v", receiver.config.Main.IP),
 		fmt.Sprintf("rm -rf '%v'", receiver.MainDir())); err != nil {
 		return errors.Join(errors.New(output), err)
@@ -37,7 +45,11 @@ func (receiver *Hive) DownMain() error {
 
 func (receiver *Hive) DownNode(node NodeConfig) error {
 	// stop services
-	if output, err := cmdutil.Run(receiver.dir, nil, "ssh",
+	if output, err := cmdutil.Run(
+		receiver.dir,
+		nil,
+		"ssh",
+		"-o", "StrictHostKeyChecking=no",
 		fmt.Sprintf("root@%v", node.IP),
 		fmt.Sprintf("docker-compose --project-directory '%v' down", receiver.NodeDir())); err != nil {
 		switch {
@@ -50,7 +62,11 @@ func (receiver *Hive) DownNode(node NodeConfig) error {
 	Log("INFO", node.IP, "node dir %v docker-compose down success", receiver.MainDir())
 
 	// remove files
-	if output, err := cmdutil.Run(receiver.dir, nil, "ssh",
+	if output, err := cmdutil.Run(
+		receiver.dir,
+		nil,
+		"ssh",
+		"-o", "StrictHostKeyChecking=no",
 		fmt.Sprintf("root@%v", node.IP),
 		fmt.Sprintf("rm -rf '%v'", receiver.NodeDir())); err != nil {
 		return errors.Join(errors.New(output), err)

@@ -14,7 +14,11 @@ func (receiver *Hive) UpMain() error {
 	cfg := receiver.config
 
 	// create remote dir
-	if output, err := cmdutil.Run(receiver.dir, nil, "ssh",
+	if output, err := cmdutil.Run(
+		receiver.dir,
+		nil,
+		"ssh",
+		"-o", "StrictHostKeyChecking=no",
 		fmt.Sprintf("root@%v", cfg.Main.IP),
 		fmt.Sprintf("mkdir -p '%v'", receiver.MainDir())); err != nil {
 		return errors.Join(errors.New(output), err)
@@ -22,8 +26,12 @@ func (receiver *Hive) UpMain() error {
 	Log("INFO", cfg.Main.IP, "main dir %v prepared", receiver.MainDir())
 
 	// rsync folders
-	if output, err := cmdutil.Run(receiver.dir, nil, "rsync",
+	if output, err := cmdutil.Run(
+		receiver.dir,
+		nil,
+		"rsync",
 		"-avz",
+		"-e", "ssh -o StrictHostKeyChecking=no",
 		fmt.Sprintf("%v/", receiver.dir),
 		fmt.Sprintf("root@%v:%v/", cfg.Main.IP, receiver.MainDir())); err != nil {
 		return errors.Join(errors.New(output), err)
@@ -51,7 +59,12 @@ func (receiver *Hive) UpMain() error {
 	}
 
 	// copy docker-compose.yaml for main
-	if output, err := cmdutil.Run(receiver.dir, nil, "rsync", "-avz",
+	if output, err := cmdutil.Run(
+		receiver.dir,
+		nil,
+		"rsync",
+		"-avz",
+		"-e", "ssh -o StrictHostKeyChecking=no",
 		fmt.Sprintf("%v/docker-compose.yaml", tmpdir),
 		fmt.Sprintf("root@%v:%v/docker-compose.yaml", cfg.Main.IP, receiver.MainDir())); err != nil {
 		return errors.Join(errors.New(output), err)
@@ -59,7 +72,11 @@ func (receiver *Hive) UpMain() error {
 	Log("INFO", cfg.Main.IP, "main dir %v docker-compose.yaml prepared", receiver.MainDir())
 
 	// remote docker-compose up -d
-	if output, err := cmdutil.Run(receiver.dir, nil, "ssh",
+	if output, err := cmdutil.Run(
+		receiver.dir,
+		nil,
+		"ssh",
+		"-o", "StrictHostKeyChecking=no",
 		fmt.Sprintf("root@%v", cfg.Main.IP),
 		fmt.Sprintf("docker-compose --project-directory '%v' up -d --force-recreate", receiver.MainDir())); err != nil {
 		return errors.Join(
@@ -87,8 +104,12 @@ func (receiver *Hive) UpNode(node NodeConfig) error {
 	Log("INFO", node.IP, "node dir %v prepared", receiver.NodeDir())
 
 	// rsync folders
-	if output, err := cmdutil.Run(receiver.dir, nil, "rsync",
+	if output, err := cmdutil.Run(
+		receiver.dir,
+		nil,
+		"rsync",
 		"-avz",
+		"-e", "ssh -o StrictHostKeyChecking=no",
 		fmt.Sprintf("%v/", receiver.dir),
 		fmt.Sprintf("root@%v:%v/", node.IP, receiver.NodeDir())); err != nil {
 		return errors.Join(errors.New(output), err)
@@ -116,7 +137,12 @@ func (receiver *Hive) UpNode(node NodeConfig) error {
 	}
 
 	// copy docker-compose.yaml for node
-	if output, err := cmdutil.Run(receiver.dir, nil, "rsync", "-avz",
+	if output, err := cmdutil.Run(
+		receiver.dir,
+		nil,
+		"rsync",
+		"-avz",
+		"-e", "ssh -o StrictHostKeyChecking=no",
 		fmt.Sprintf("%v/docker-compose.yaml", tmpdir),
 		fmt.Sprintf("root@%v:%v/docker-compose.yaml", node.IP, receiver.NodeDir())); err != nil {
 		return errors.Join(errors.New(output), err)
@@ -124,7 +150,11 @@ func (receiver *Hive) UpNode(node NodeConfig) error {
 	Log("INFO", node.IP, "node dir %v docker-compose.yaml prepared", receiver.NodeDir())
 
 	// remote docker-compose up -d
-	if output, err := cmdutil.Run(receiver.dir, nil, "ssh",
+	if output, err := cmdutil.Run(
+		receiver.dir,
+		nil,
+		"ssh",
+		"-o", "StrictHostKeyChecking=no",
 		fmt.Sprintf("root@%v", node.IP),
 		fmt.Sprintf("docker-compose --project-directory '%v' up -d --force-recreate --scale load-hive-%v-node=%v",
 			receiver.NodeDir(),

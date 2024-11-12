@@ -10,7 +10,11 @@ import (
 func (receiver *Hive) StatusMain() {
 	cfg := receiver.config
 	// remote docker-compose ps 'table{{.Name}}\t{{.Status}}'
-	output, err := cmdutil.Run(receiver.dir, nil, "ssh",
+	output, err := cmdutil.Run(
+		receiver.dir,
+		nil,
+		"ssh",
+		"-o", "StrictHostKeyChecking=no",
 		fmt.Sprintf("root@%v", cfg.Main.IP),
 		fmt.Sprintf("docker ps --format 'table{{.Names}}\\t{{.Status}}'"))
 	switch {
@@ -32,7 +36,11 @@ func (receiver *Hive) StatusMain() {
 
 func (receiver *Hive) StatusNode(node NodeConfig) {
 	// remote docker-compose ps 'table{{.Name}}\t{{.Status}}'
-	output, err := cmdutil.Run(receiver.dir, nil, "ssh",
+	output, err := cmdutil.Run(
+		receiver.dir,
+		nil,
+		"ssh",
+		"-o", "StrictHostKeyChecking=no",
 		fmt.Sprintf("root@%v", node.IP),
 		fmt.Sprintf("docker ps --format 'table{{.Names}}\\t{{.Status}}'"))
 	switch {
