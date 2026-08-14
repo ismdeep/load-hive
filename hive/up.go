@@ -14,6 +14,7 @@ func (receiver *Hive) UpMain() error {
 	cfg := receiver.config
 
 	// create remote dir
+	Log("INFO", cfg.Main.IP, "prepare main dir %v ...", receiver.MainDir())
 	if output, err := cmdutil.Run(
 		receiver.dir,
 		nil,
@@ -23,9 +24,9 @@ func (receiver *Hive) UpMain() error {
 		fmt.Sprintf("mkdir -p '%v'", receiver.MainDir())); err != nil {
 		return errors.Join(errors.New(output), err)
 	}
-	Log("INFO", cfg.Main.IP, "main dir %v prepared", receiver.MainDir())
 
 	// rsync folders
+	Log("INFO", cfg.Main.IP, "upload source code ...")
 	if output, err := cmdutil.Run(
 		receiver.dir,
 		nil,
@@ -36,7 +37,6 @@ func (receiver *Hive) UpMain() error {
 		fmt.Sprintf("root@%v:%v/", cfg.Main.IP, receiver.MainDir())); err != nil {
 		return errors.Join(errors.New(output), err)
 	}
-	Log("INFO", cfg.Main.IP, "main dir %v synced", receiver.MainDir())
 
 	// generate docker-compose content
 	text, err := GenerateMainDockerCompose(*receiver.config)
@@ -59,6 +59,7 @@ func (receiver *Hive) UpMain() error {
 	}
 
 	// copy docker-compose.yaml for main
+	Log("INFO", cfg.Main.IP, "upload docker-compose.yaml ...")
 	if output, err := cmdutil.Run(
 		receiver.dir,
 		nil,
@@ -69,9 +70,9 @@ func (receiver *Hive) UpMain() error {
 		fmt.Sprintf("root@%v:%v/docker-compose.yaml", cfg.Main.IP, receiver.MainDir())); err != nil {
 		return errors.Join(errors.New(output), err)
 	}
-	Log("INFO", cfg.Main.IP, "main dir %v docker-compose.yaml prepared", receiver.MainDir())
 
 	// remote docker-compose up -d
+	Log("INFO", cfg.Main.IP, "docker-compose up -d ...")
 	if output, err := cmdutil.Run(
 		receiver.dir,
 		nil,
@@ -84,7 +85,6 @@ func (receiver *Hive) UpMain() error {
 			errors.New(output),
 			err)
 	}
-	Log("INFO", cfg.Main.IP, "main dir %v docker-compose up -d success", receiver.MainDir())
 
 	Log("INFO", receiver.config.Hive.UUID, "main %v is up", receiver.config.Main.IP)
 
@@ -93,6 +93,7 @@ func (receiver *Hive) UpMain() error {
 
 func (receiver *Hive) UpNode(node NodeConfig) error {
 	// create remote dir
+	Log("INFO", node.IP, "prepare node dir %v ...", receiver.NodeDir())
 	if output, err := cmdutil.Run(receiver.dir, nil,
 		"ssh",
 		fmt.Sprintf("root@%v", node.IP),
@@ -101,9 +102,9 @@ func (receiver *Hive) UpNode(node NodeConfig) error {
 			errors.New(output),
 			err)
 	}
-	Log("INFO", node.IP, "node dir %v prepared", receiver.NodeDir())
 
 	// rsync folders
+	Log("INFO", node.IP, "upload source code ...")
 	if output, err := cmdutil.Run(
 		receiver.dir,
 		nil,
@@ -114,7 +115,6 @@ func (receiver *Hive) UpNode(node NodeConfig) error {
 		fmt.Sprintf("root@%v:%v/", node.IP, receiver.NodeDir())); err != nil {
 		return errors.Join(errors.New(output), err)
 	}
-	Log("INFO", node.IP, "node dir %v synced", receiver.NodeDir())
 
 	// generate docker-compose content
 	text, err := GenerateNodeDockerCompose(*receiver.config)
@@ -137,6 +137,7 @@ func (receiver *Hive) UpNode(node NodeConfig) error {
 	}
 
 	// copy docker-compose.yaml for node
+	Log("INFO", node.IP, "upload docker-compose.yaml ...")
 	if output, err := cmdutil.Run(
 		receiver.dir,
 		nil,
@@ -147,16 +148,16 @@ func (receiver *Hive) UpNode(node NodeConfig) error {
 		fmt.Sprintf("root@%v:%v/docker-compose.yaml", node.IP, receiver.NodeDir())); err != nil {
 		return errors.Join(errors.New(output), err)
 	}
-	Log("INFO", node.IP, "node dir %v docker-compose.yaml prepared", receiver.NodeDir())
 
 	// remote docker-compose up -d
+	Log("INFO", node.IP, "docker-compose up -d ...")
 	if output, err := cmdutil.Run(
 		receiver.dir,
 		nil,
 		"ssh",
 		"-o", "StrictHostKeyChecking=no",
 		fmt.Sprintf("root@%v", node.IP),
-		fmt.Sprintf("docker-compose --project-directory '%v' up -d --force-recreate --scale load-hive-%v-node=%v",
+		fmt.Sprintf("docker-compose --project-directory '%v' up -d --force-recreate --scale lh-%v-node=%v",
 			receiver.NodeDir(),
 			receiver.config.Hive.UUID,
 			node.Worker,
@@ -166,7 +167,6 @@ func (receiver *Hive) UpNode(node NodeConfig) error {
 			errors.New(output),
 			err)
 	}
-	Log("INFO", node.IP, "node dir %v docker-compose up -d success", receiver.NodeDir())
 
 	return nil
 }

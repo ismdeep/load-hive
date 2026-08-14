@@ -57,9 +57,9 @@ func New(dir string, configName string) (*Hive, error) {
 }
 
 func (receiver *Hive) MainDir() string {
-	return fmt.Sprintf("/var/lib/load-hive-%v-main", receiver.config.Hive.UUID)
+	return fmt.Sprintf("/var/lib/lh-%v-main", receiver.config.Hive.UUID)
 }
 
 func (receiver *Hive) NodeDir() string {
-	return fmt.Sprintf("/var/lib/load-hive-%v-node", receiver.config.Hive.UUID)
+	return fmt.Sprintf("/var/lib/lh-%v-node", receiver.config.Hive.UUID)
 }

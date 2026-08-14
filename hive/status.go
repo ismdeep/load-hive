@@ -26,7 +26,7 @@ func (receiver *Hive) StatusMain() {
 		lines := strings.Split(output, "\n")
 		fmt.Println(lines[0])
 		for _, s := range lines[1:] {
-			if strings.Contains(s, fmt.Sprintf("load-hive-%v-main", receiver.config.Hive.UUID)) {
+			if strings.Contains(s, fmt.Sprintf("lh-%v-main", receiver.config.Hive.UUID)) {
 				fmt.Println(s)
 			}
 		}
@@ -52,7 +52,7 @@ func (receiver *Hive) StatusNode(node NodeConfig) {
 		lines := strings.Split(output, "\n")
 		fmt.Println(lines[0])
 		for _, s := range lines[1:] {
-			if strings.Contains(s, fmt.Sprintf("load-hive-%v-node", receiver.config.Hive.UUID)) {
+			if strings.Contains(s, fmt.Sprintf("lh-%v-node", receiver.config.Hive.UUID)) {
 				fmt.Println(s)
 			}
 		}
