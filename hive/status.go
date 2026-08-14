@@ -16,7 +16,7 @@ func (receiver *Hive) StatusMain() {
 		"ssh",
 		"-o", "StrictHostKeyChecking=no",
 		fmt.Sprintf("root@%v", cfg.Main.IP),
-		fmt.Sprintf("docker ps --format 'table{{.Names}}\\t{{.Status}}'"))
+		"docker ps --format 'table{{.Names}}\\t{{.Status}}'")
 	switch {
 	case err != nil:
 		fmt.Printf("========== UUID: %v    MAIN: %v FAILED ==========\n", receiver.config.Hive.UUID, cfg.Main.IP)
@@ -42,7 +42,7 @@ func (receiver *Hive) StatusNode(node NodeConfig) {
 		"ssh",
 		"-o", "StrictHostKeyChecking=no",
 		fmt.Sprintf("root@%v", node.IP),
-		fmt.Sprintf("docker ps --format 'table{{.Names}}\\t{{.Status}}'"))
+		"docker ps --format 'table{{.Names}}\\t{{.Status}}'")
 	switch {
 	case err != nil:
 		fmt.Printf("========== UUID: %v    NODE: %v FAILED ==========\n", receiver.config.Hive.UUID, node.IP)
