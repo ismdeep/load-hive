@@ -1,7 +1,7 @@
 services:
   lh-{{ .HiveID }}-main:
     container_name: lh-{{ .HiveID }}-main
-    image: hub.deepin.com/library/locustio/locust:latest
+    image: '{{ .Image }}'
     working_dir: /mnt/locust
     command: -f /mnt/locust/locustfile.py --master -u {{ .UserCount }} -r {{ .SpawnRate }} -P {{ .WebPort }} --host {{ .Target }}
     volumes:

@@ -13,6 +13,7 @@ func TestGenerateMainDockerCompose(t *testing.T) {
 		Main: MainConfig{IP: "10.20.30.40"},
 		Hive: HiveConfig{
 			UUID:            "hive1",
+			Image:           "locustio/locust:latest",
 			Port:            "8080",
 			Target:          "http://10.20.30.50:9000",
 			InternalAPIPort: "5555",
@@ -35,7 +36,7 @@ func TestGenerateMainDockerCompose(t *testing.T) {
 	if service.ContainerName != "lh-hive1-main" {
 		t.Fatalf("container_name = %q, want %q", service.ContainerName, "lh-hive1-main")
 	}
-	if service.Image != "hub.deepin.com/library/locustio/locust:latest" {
+	if service.Image != "locustio/locust:latest" {
 		t.Fatalf("image = %q", service.Image)
 	}
 	if service.Command != "-f /mnt/locust/locustfile.py --master -u 200 -r 20 -P 8080 --host http://10.20.30.50:9000" {
@@ -71,8 +72,12 @@ func TestGenerateNodeDockerCompose(t *testing.T) {
 		Main: MainConfig{IP: "10.20.30.40"},
 		Hive: HiveConfig{
 			UUID:            "hive1",
+			Image:           "locustio/locust:latest",
 			Port:            "8080",
+			Target:          "",
 			InternalAPIPort: "5555",
+			UserCount:       0,
+			SpawnRate:       0,
 		},
 		ExtraHosts: map[string]string{
 			"api.example.com": "127.0.0.1",
@@ -86,7 +91,7 @@ func TestGenerateNodeDockerCompose(t *testing.T) {
 
 	services := mustComposeServices(t, got)
 	service := services["lh-hive1-node"]
-	if service.Image != "hub.deepin.com/library/locustio/locust:latest" {
+	if service.Image != "locustio/locust:latest" {
 		t.Fatalf("image = %q", service.Image)
 	}
 	if service.Command != "-f /mnt/locust/locustfile.py --worker --master-host=10.20.30.40 --master-port=5555" {

@@ -1,6 +1,6 @@
 services:
   lh-{{ .HiveID }}-node:
-    image: hub.deepin.com/library/locustio/locust:latest
+    image: '{{ .Image }}'
     working_dir: /mnt/locust
     command: -f /mnt/locust/locustfile.py --worker --master-host={{ .MainIP }} --master-port={{ .InternalAPIPort}}
     volumes:

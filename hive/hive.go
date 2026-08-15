@@ -26,7 +26,7 @@ func New(dir string, configName string) (*Hive, error) {
 		return nil, err
 	}
 
-	// 清理cfg
+	// 设置默认值
 	for i := 0; i < len(cfg.Nodes); i++ {
 		if cfg.Nodes[i].Worker <= 0 {
 			cfg.Nodes[i].Worker = 8
@@ -37,6 +37,9 @@ func New(dir string, configName string) (*Hive, error) {
 	}
 	if cfg.Hive.SpawnRate <= 0 {
 		cfg.Hive.SpawnRate = 100
+	}
+	if cfg.Hive.Image == "" {
+		cfg.Hive.Image = "locustio/locust:latest"
 	}
 
 	project := Hive{

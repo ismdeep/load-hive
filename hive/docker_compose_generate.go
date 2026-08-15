@@ -14,6 +14,7 @@ func GenerateMainDockerCompose(cfg Config) (string, error) {
 
 	text, err := templateutil.Generate(dockerComposeMainContent, map[string]any{
 		"HiveID":          cfg.Hive.UUID,
+		"Image":           cfg.Hive.Image,
 		"UserCount":       cfg.Hive.UserCount,
 		"SpawnRate":       cfg.Hive.SpawnRate,
 		"WebPort":         cfg.Hive.Port,
@@ -36,6 +37,7 @@ func GenerateNodeDockerCompose(cfg Config) (string, error) {
 
 	text, err := templateutil.Generate(dockerComposeNodeContent, map[string]any{
 		"HiveID":          cfg.Hive.UUID,
+		"Image":           cfg.Hive.Image,
 		"WebPort":         cfg.Hive.Port,
 		"MainIP":          cfg.Main.IP,
 		"InternalAPIPort": cfg.Hive.InternalAPIPort,
