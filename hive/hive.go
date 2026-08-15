@@ -42,6 +42,12 @@ func New(dir string, configName string) (*Hive, error) {
 		cfg.Hive.Image = "locustio/locust:latest"
 	}
 
+	Log("INFO", "config", "hive.uuid: %v", cfg.Hive.UUID)
+	Log("INFO", "config", "hive.image: %v", cfg.Hive.Image)
+	Log("INFO", "config", "hive.target: %v", cfg.Hive.Target)
+	Log("INFO", "config", "hive.user_count: %v", cfg.Hive.UserCount)
+	Log("INFO", "config", "hive.spawn_rate: %v", cfg.Hive.SpawnRate)
+
 	project := Hive{
 		dir:        dir,
 		configName: configName,
